@@ -3,12 +3,13 @@
  ; java.util.Date)
 
 (defrecord Heapnode [data lc rc])
-(defrecord Heaptree [root])
-(defn heap_push [this data]
+(defrecord Heaptree [root order])
+;; order should only be "ASC" or "DESC"
+(defn heap_push_node [this data order]
   (def root this)
   (if (nil? (:lc root))
     (let [node (Heapnode. data nil nil)]
-       (Heapnode. (:data root) node nil))
+      (Heapnode. (:data root) node nil))
     (if (nil? (:rc root))
       (let [node (Heapnode. data nil nil)]
         (Heapnode.
@@ -18,22 +19,26 @@
       (let [rc (:rc root) lc (:lc root)]
         (Heapnode.
          (:data root)
-         (heap_push lc data)
-         rc)
-        ))))
+         (heap_push_node lc data order)
+         rc)))))
+
+(defn heap_push [this data]
+  (let [root (heap_push_node (:root this) data (:order this))]
+    (Heaptree. root (:order this))))
 
 (defn -main
   [& args]
   (do
-    (def root (Heapnode. 0 nil nil))
-    (def root
+    (def r (Heapnode. 0 nil nil))
+    (def tree (Heaptree. r "ASC"))
+    (def tree
       (heap_push
        (heap_push
         (heap_push
          (heap_push
-          (heap_push root 1)
+          (heap_push tree 1)
           2)
          3)
         4)
        5))
-    (println "34"  root)))
+    (println (:root tree))))
