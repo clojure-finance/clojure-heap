@@ -3,7 +3,19 @@
  ; java.util.Date)
 
 (defrecord Heapnode [data lc rc])
-(defrecord Heaptree [root order])
+(defprotocol HEAP
+ (heap_pop [tree])
+  (heap_push [tree data]))
+(defrecord Heaptree [root order]
+  HEAP
+  (heap_pop [this]
+       (do
+         (def ret (:data (:root this)))
+         (def :root (:lc (:root this)))
+         ret))
+  (heap_push [this data]
+             (do ))
+  )
 ;; order should only be "ASC" or "DESC"
 (defn heap_push_node [this data order]
   (def root this)
@@ -41,4 +53,7 @@
          3)
         4)
        5))
-    (println (:root tree))))
+    (println (:root tree))
+    (println (.heap_pop tree))
+    (println (:root tree))
+    ))
