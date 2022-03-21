@@ -3,19 +3,7 @@
  ; java.util.Date)
 
 (defrecord Heapnode [data lc rc])
-(defprotocol HEAP
- (heap_pop [tree])
-  (heap_push [tree data]))
-(defrecord Heaptree [root order]
-  HEAP
-  (heap_pop [this]
-       (do
-         (def ret (:data (:root this)))
-         (update this :root (:lc (:root this)))
-         ret))
-  (heap_push [this data]
-             (print 1))
-  )
+(defrecord Heaptree [root order])
 
 ;; sort to put root to the right place
 (defn heap_sort [this]
@@ -24,7 +12,7 @@
       (if (and (nil? (:rc root)) (nil? (:lc root)))
         this
         (if (nil? (:rc root))
-          (if (or (and (= order "ASC") (<  (:data (:lc root)) (:data root))) (and (= order "DESC") (> (:data (:lc root)) (:data root))))
+          (if (or (and (= order "ASC") (>  (:data (:lc root)) (:data root))) (and (= order "DESC") (< (:data (:lc root)) (:data root))))
             this
             (let [lc_new (:root (heap_sort (Heaptree. (Heapnode. (:data root) (:lc (:lc root)) (:rc (:lc root))) order)))]
               (Heaptree. (Heapnode. (:data (:lc root)) lc_new nil) order)))
@@ -67,11 +55,28 @@
         (heap_sort (Heaptree. (Heapnode. data root nil) order))))))
 
 (defn find_leave [this]
-  (let [root (:root this)]
-    ))
+  (let [root (:root this) lc (:lc root) rc (:rc root)]
+    (if (and (nil? lc) (nil? rc))
+      [(:data root) nil]
+      (if (or (nil? lc) (nil? rc))
+        (if (nil? lc) 
+          (let [ret (find_leave (Heaptree. rc (:order this)))]
+            [(first ret) (Heaptree. (Heapnode. (:data root) lc (:root (second ret))) (:order this))])
+          (let [ret (find_leave (Heaptree. lc (:order this)))]
+            [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))]))
+      (if (and (nil? (:lc lc)) (nil? (:rc lc)))
+        [(:dara lc) (Heaptree. (Heapnode. (:data root) nil rc) (:order this))]
+        (if (and (nil? (:lc rc)) (nil? (:rc rc)))
+          [(:data rc) (Heaptree. (Heapnode. (:data root) lc nil) (:order this))]
+          (let [ret (find_leave (Heaptree. lc (:order this)))]
+            [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))])))))))
 
 (defn heap_pop [this]
-  (let [ret (:data root)]))
+  (let [ret (:data (:root this))
+        par (find_leave this)
+        new_root (:root (second par))
+        new_tree (heap_sort (Heaptree. (Heapnode. (first par) (:lc new_root) (:rc new_root)) (:order this)))]
+    [ret new_tree]))
 
 (defn -main
   [& args]
@@ -79,14 +84,19 @@
     (def r (Heapnode. 9 nil nil))
     (def tree (Heaptree. r "ASC"))
     (def tree
-      (heap_push
-       (heap_push
-        (heap_push
-         (heap_push
-          (heap_push tree 1)
-          2)
-         8)
-        4)
-       5))
-    (println (:root tree))
-    ))
+      (heap_push tree 1))
+    (def tree
+      (heap_push tree 3))
+    (def tree
+      (heap_push tree 10))
+    (def tree
+      (heap_push tree 2))
+    (def tree
+      (heap_push tree 8))
+    (println tree)
+    (def tree
+      (do
+        (let [ret (heap_pop tree)]
+          (println (first ret))
+          (second ret))))
+    (println tree)))
