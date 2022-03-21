@@ -31,7 +31,7 @@
           (if (or (and (= order "ASC") (<  (:data (:rc root)) (:data root))) (and (= order "DESC") (> (:data (:rc root)) (:data root))))
             this
             (let [rc_new (:root (heap_sort (Heaptree. (Heapnode. (:data root) (:lc (:rc root)) (:rc (:rc root))) order)))]
-              (Heaptree. (Heapnode. (:data (:rc root)) rc_new nil) order)))
+              (Heaptree. (Heapnode. (:data (:rc root)) nil rc_new) order)))
           ))
       (if (= order "ASC")
         (if (< (:data (:rc root)) (:data (:lc root)))
@@ -58,34 +58,25 @@
               (Heaptree. root_new order))))))))
 
 ;; order should only be "ASC" or "DESC"
-(defn heap_push_node [this data order]
-  (def root this)
-  (if (nil? (:lc root))
-    (let [node (Heapnode. data nil nil)]
-      (Heapnode. (:data root) node nil))
-    (if (nil? (:rc root))
-      (let [node (Heapnode. data nil nil)]
-        (Heapnode.
-         (:data root)
-         (:lc root)
-         node))
-      (let [rc (:rc root) lc (:lc root)]
-        (Heapnode.
-         (:data root)
-         (heap_push_node lc data order)
-         rc)))))
-
 (defn heap_push [this data]
-  (let [root (heap_push_node (:root this) data (:order this))]
-    (heap_sort (Heaptree. root (:order this)))))
+  (let [root (:root this) order (:order this)]
+    (if (nil? (:lc root))
+      (heap_sort (Heaptree. (Heapnode. data (Heapnode. (:data root) nil nil) (:rc root)) order))
+      (if (nil? (:rc root))
+        (heap_sort (Heaptree. (Heapnode. data (:lc root) (Heapnode. (:data root) nil nil)) order))
+        (heap_sort (Heaptree. (Heapnode. data root nil) order))))))
+
+(defn find_leave [this]
+  (let [root (:root this)]
+    ))
 
 (defn heap_pop [this]
-  (let [ret (:data (:root this))]))
+  (let [ret (:data root)]))
 
 (defn -main
   [& args]
   (do
-    (def r (Heapnode. 0 nil nil))
+    (def r (Heapnode. 9 nil nil))
     (def tree (Heaptree. r "ASC"))
     (def tree
       (heap_push
@@ -94,7 +85,7 @@
          (heap_push
           (heap_push tree 1)
           2)
-         3)
+         8)
         4)
        5))
     (println (:root tree))
