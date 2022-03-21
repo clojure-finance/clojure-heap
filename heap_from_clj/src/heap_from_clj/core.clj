@@ -57,19 +57,20 @@
 (defn find_leave [this]
   (let [root (:root this) lc (:lc root) rc (:rc root)]
     (if (and (nil? lc) (nil? rc))
-      [(:data root) nil]
+        [(:data root) nil]
       (if (or (nil? lc) (nil? rc))
-        (if (nil? lc) 
+        (if (nil? lc)
           (let [ret (find_leave (Heaptree. rc (:order this)))]
             [(first ret) (Heaptree. (Heapnode. (:data root) lc (:root (second ret))) (:order this))])
           (let [ret (find_leave (Heaptree. lc (:order this)))]
             [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))]))
-      (if (and (nil? (:lc lc)) (nil? (:rc lc)))
-        [(:dara lc) (Heaptree. (Heapnode. (:data root) nil rc) (:order this))]
-        (if (and (nil? (:lc rc)) (nil? (:rc rc)))
-          [(:data rc) (Heaptree. (Heapnode. (:data root) lc nil) (:order this))]
-          (let [ret (find_leave (Heaptree. lc (:order this)))]
-            [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))])))))))
+        (if (and (nil? (:lc lc)) (nil? (:rc lc)))
+          [(:data (:lc root)) (Heaptree. (Heapnode. (:data root) nil rc) (:order this))]
+          (if (and (nil? (:lc rc)) (nil? (:rc rc)))
+            [(:data (:rc root)) (Heaptree. (Heapnode. (:data root) lc nil) (:order this))]
+            (let [ret (find_leave (Heaptree. lc (:order this)))]
+              (println ret)
+              [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))])))))))
 
 (defn heap_pop [this]
   (let [ret (:data (:root this))
@@ -90,10 +91,26 @@
     (def tree
       (heap_push tree 10))
     (def tree
-      (heap_push tree 2))
-    (def tree
       (heap_push tree 8))
     (println tree)
+    (def tree
+      (do
+        (let [ret (heap_pop tree)]
+          (println (first ret))
+          (second ret))))
+(println tree)
+    (def tree
+      (do
+        (let [ret (heap_pop tree)]
+          (println (first ret))
+          (second ret))))
+(println tree)
+    (def tree
+      (do
+        (let [ret (heap_pop tree)]
+          (println (first ret))
+          (second ret))))
+(println tree)
     (def tree
       (do
         (let [ret (heap_pop tree)]
