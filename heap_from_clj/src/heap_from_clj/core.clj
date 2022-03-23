@@ -1,14 +1,20 @@
 (ns heap_from_clj.core)
 
+;; basic structure
 (defrecord Heapnode [data lc rc])
 (defrecord Heaptree [root order])
 
-(defn make-heaptree [root order]
-  (Heaptree. root order))
+;; construction function. default order is ASC
+(defn make-heaptree
+  ([root]
+   (Heaptree. root "ASC"))
+  ([root order]
+   (Heaptree. root order)))
 
 ;; compare function
+;; represents relationship between parent and child node. 
 (defn heap_compare [x1 x2]
-  (if (> x1 x2) true false))
+  (if (< x1 x2) true false))
 
 ;; sort to put root to the right place
 (defn heap_sort [this]
@@ -17,7 +23,7 @@
       (if (and (nil? (:rc root)) (nil? (:lc root)))
         this
         (if (nil? (:rc root))
-          (if (or (and (= order "ASC") (heap_compare  (:data (:lc root)) (:data root))) (and (= order "DESC") (not (heap_compare (:data (:lc root)) (:data root)))))
+          (if (or (and (= order "ASC") (not (heap_compare  (:data (:lc root)) (:data root)))) (and (= order "DESC") (heap_compare (:data (:lc root)) (:data root))))
             this
             (let [lc_new (:root (heap_sort (Heaptree. (Heapnode. (:data root) (:lc (:lc root)) (:rc (:lc root))) order)))]
               (Heaptree. (Heapnode. (:data (:lc root)) lc_new nil) order)))
@@ -90,9 +96,10 @@
 
 (defn -main
   [& args]
+  ;; testing and example
   (do
     (def r (Heapnode. 7 nil nil))
-    (def tree (make-heaptree r "DESC"))
+    (def tree (make-heaptree r))
     (def tree
       (heap_push tree 4))
     (def tree
@@ -128,5 +135,5 @@
           (println (first ret))
           (second ret))))
     (def tree
-      (heap_push tree 5))
+      (heap_push tree 6))
     (println tree)))
