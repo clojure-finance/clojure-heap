@@ -1,4 +1,5 @@
-(ns heap_from_clj.core)
+(ns heap_from_clj.core
+  (:gen-class))
 
 ;; basic structure
 (defrecord Heapnode [data lc rc])
