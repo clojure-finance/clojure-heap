@@ -71,7 +71,7 @@
               (Heaptree. root_new order))))))))
 
 ;; order should only be "ASC" or "DESC"
-(defn heap_push [this data]
+(defn heap-push [this data]
   (if (nil? (:data (:root this)))
     (Heaptree. (Heapnode. data nil nil) (:order this))
     (let [root (:root this) order (:order this)]
@@ -99,13 +99,17 @@
               (println ret)
               [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))])))))))
 
-(defn heap_pop [this]
+(defn heap-pop [this]
   (if (and (nil? (:rc (:root this))) (nil? (:lc (:root this))))
     [(:data (:root this)) (Heaptree. (Heapnode. nil nil nil) (:order this))]
-    (let [ret (:data (:root this))
-          par (find_leave this)
-          new_root (:root (second par))
-          new_tree (heap_sort (Heaptree. (Heapnode. (first par) (:lc new_root) (:rc new_root)) (:order this)))]
+    (let [ret
+          (:data (:root this))
+          par
+          (find_leave this)
+          new_root
+          (:root (second par))
+          new_tree
+          (heap_sort (Heaptree. (Heapnode. (first par) (:lc new_root) (:rc new_root)) (:order this)))]
       [ret new_tree])))
 
 (defn -main
@@ -115,39 +119,39 @@
     (def r (Heapnode. 7 nil nil))
     (def tree (make-heaptree r))
     (def tree
-      (heap_push tree 4))
+      (heap-push tree 4))
     (def tree
-      (heap_push tree 8))
+      (heap-push tree 8))
     (def tree
-      (heap_push tree 1))
+      (heap-push tree 1))
     (def tree
-      (heap_push tree 5))
+      (heap-push tree 5))
     (println tree)
     (def tree
       (do
-        (let [ret (heap_pop tree)]
+        (let [ret (heap-pop tree)]
           (println (first ret))
           (second ret))))
     (def tree
       (do
-        (let [ret (heap_pop tree)]
+        (let [ret (heap-pop tree)]
           (println (first ret))
           (second ret))))
     (def tree
       (do
-        (let [ret (heap_pop tree)]
+        (let [ret (heap-pop tree)]
           (println (first ret))
           (second ret))))
     (def tree
       (do
-        (let [ret (heap_pop tree)]
+        (let [ret (heap-pop tree)]
           (println (first ret))
           (second ret))))
     (def tree
       (do
-        (let [ret (heap_pop tree)]
+        (let [ret (heap-pop tree)]
           (println (first ret))
           (second ret))))
     (def tree
-      (heap_push tree 6))
+      (heap-push tree 6))
     (println tree)))
