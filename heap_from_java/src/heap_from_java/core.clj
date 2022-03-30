@@ -1,20 +1,28 @@
 (ns heap_from_java.core
-  (:import java.util.PriorityQueue))
+  (:refer-clojure :exclude [remove pop])
+  (:gen-class)
+  (:import [java.util PriorityQueue]))
 
 (defn init
-  "initialize queue"
+  "initialize an empty heap"
   ([]
-  (let [pq (PriorityQueue.)] pq) (let [pq (PriorityQueue.)] pq) )
+   (let [pq (PriorityQueue.)] pq))
   ([comparator]
-   (let [pq (PriorityQueue.)] pq) (let [pq (PriorityQueue. comparator)] pq) ))
+   (let [pq (PriorityQueue. comparator)] pq)))
 
-(defn add
+(defn push
   "add element into priority queue"
   [pq e]
-  (.add pq e))
+  (.add pq e)
+  pq)
 
-(defn poll
-  "poll out the first element in queue"
+(defn get-root
+  "pop the root element and do not update priority queue"
+  [heap]
+  (.peek heap))
+
+(defn pop
+  "pop out the first element in queue and update queue"
   [pq]
   (.poll pq))
 
@@ -27,9 +35,12 @@
   "main function"
   [& args]
  (let [pq (init >)]
-   (add pq 5)
-   (add pq 3)
-   (add pq 7)
-   (println (poll pq) (poll pq))
-   (add pq 8)
-   (println (size pq))))
+   (push pq 5)
+   (push pq 3)
+   (push pq 7)
+   (println "size" (size pq))
+   (println (get-root pq))
+   (println (pop pq))
+   (println (pop pq))
+   (push pq 8)
+   (println "size" (size pq))))
