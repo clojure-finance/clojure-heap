@@ -129,30 +129,18 @@
       (heap-push tree 5))
     (println tree)
     (def tree
-      (do
-        (let [ret (heap-pop tree)]
-          (println (first ret))
-          (second ret))))
+      (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))
     (def tree
-      (do
-        (let [ret (heap-pop tree)]
-          (println (first ret))
-          (second ret))))
+      (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))
     (def tree
-      (do
-        (let [ret (heap-pop tree)]
-          (println (first ret))
-          (second ret))))
+      (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))
     (def tree
-      (do
-        (let [ret (heap-pop tree)]
-          (println (first ret))
-          (second ret))))
+      (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))
     (def tree
-      (do
-        (let [ret (heap-pop tree)]
-          (println (first ret))
-          (second ret))))
+      (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))
+    (println tree)
     (def tree
       (heap-push tree 6))
+    (def tree
+      (heap-push tree 3))
     (println tree)))
