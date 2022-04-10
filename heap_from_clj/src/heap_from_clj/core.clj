@@ -7,6 +7,9 @@
 
 ;; construction function. default order is ASC
 (defn make-heaptree
+  ([]
+   (let [root (Heapnode. nil nil nil)]
+   (Heaptree. root "ASC")))
   ([root]
    (Heaptree. root "ASC"))
   ([root order]
@@ -117,8 +120,7 @@
   [& args]
   ;; testing and example
   (do
-    (def r (Heapnode. 7 nil nil))
-    (def tree (make-heaptree r))
+    (def tree (make-heaptree))
     (def tree
       (heap-push tree 4))
     (def tree
