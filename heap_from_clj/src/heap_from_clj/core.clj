@@ -6,6 +6,7 @@
 (defrecord Heaptree [root order])
 
 ;; construction function. default order is ASC
+;; order should only be "ASC" or "DESC"
 (defn make-heaptree
   ([]
    (let [root (Heapnode. nil nil nil)]
@@ -74,17 +75,7 @@
                   (Heapnode. (:data (:lc root)) lc_new (:rc root))]
               (Heaptree. root_new order))))))))
 
-;; order should only be "ASC" or "DESC"
-(defn heap-push [this data]
-  (if (nil? (:data (:root this)))
-    (Heaptree. (Heapnode. data nil nil) (:order this))
-    (let [root (:root this) order (:order this)]
-      (if (nil? (:lc root))
-        (heap-sort (Heaptree. (Heapnode. data (Heapnode. (:data root) nil nil) (:rc root)) order))
-        (if (nil? (:rc root))
-          (heap-sort (Heaptree. (Heapnode. data (:lc root) (Heapnode. (:data root) nil nil)) order))
-          (heap-sort (Heaptree. (Heapnode. data root nil) order)))))))
-
+;; find a leaf node to replace root while doing pop
 (defn find-leave [this]
   (let [root (:root this) lc (:lc root) rc (:rc root)]
     (if (and (nil? lc) (nil? rc))
@@ -103,6 +94,18 @@
               (println ret)
               [(first ret) (Heaptree. (Heapnode. (:data root) (:root (second ret)) rc) (:order this))])))))))
 
+;; push data into the heap and sort. 
+(defn heap-push [this data]
+  (if (nil? (:data (:root this)))
+    (Heaptree. (Heapnode. data nil nil) (:order this))
+    (let [root (:root this) order (:order this)]
+      (if (nil? (:lc root))
+        (heap-sort (Heaptree. (Heapnode. data (Heapnode. (:data root) nil nil) (:rc root)) order))
+        (if (nil? (:rc root))
+          (heap-sort (Heaptree. (Heapnode. data (:lc root) (Heapnode. (:data root) nil nil)) order))
+          (heap-sort (Heaptree. (Heapnode. data root nil) order)))))))
+
+;; pop the heap root and sort
 (defn heap-pop [this]
   (if (and (nil? (:rc (:root this))) (nil? (:lc (:root this))))
     [(:data (:root this)) (Heaptree. (Heapnode. nil nil nil) (:order this))]
