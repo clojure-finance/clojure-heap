@@ -3,8 +3,7 @@ Heap for Clojure
 uses two different ways
 
 ## 1. heap_from_java
-Functions in this package implies heap based on 
-java *PriorityQueue* library. 
+Functions in this package implies heap based on java *PriorityQueue* library. 
 
 Function features are as follows:
 
@@ -60,3 +59,72 @@ which is already updated.
 Return the number of elements inside the heap. 
 
 e.g. Suppose heap2 is the new heap after the popping above. `(size heap2)` will return 4. 
+
+
+## 2. heap_from_clj
+
+Functions in this package is a pure Clojure implement of heap. 
+
+Function features are as follows:
+
+#### 0) initialize heap node
+
+`(Heapnode. [data] [left-child-node] [right-child-node])`
+
+All the three elements can be `nil` if do not have value yet. 
+
+#### 1) make-heaptree 
+
+`(make-heaptree & root order)`
+
+Return an initialized heap. `root` can be a single root with nil left child and right child, or the root of an existing tree structure.  `order` can be either `"ASC"` or `"DESC"`, refers to in order and reverse order accordingly. Default root is empty, and default order is ASC. 
+
+One thing should be noticed is that, if the root is from an existing tree structure, this construction function will **NOT** check the order. 
+
+e.g. `(make-heaptree (Heapnode. 7 nil nil) "DESC")` will return a heap with root equals to 7, reverse priority. 
+
+#### 2) heap-compare
+
+`(heap-compare x1 x2)`
+
+Return whether x1 should be a parent node of x2 or not. Users can modify this functions to build different comparaters. 
+
+e.g. if `(heap-compare a b)` returns `True`, then the node with value a will have higher priority than node with value b in an ASC heap. 
+
+#### 3) heap-sort
+
+`(heap-sort heap)`
+
+Return a sorted heap. Private. Sort to put root to the right place
+
+#### 4) find-leave 
+
+`(find-leave heap)`
+
+Return `[[leaf-value] [new-heap]]`. Private. Find a leaf node to replace root while doing pop. 
+
+#### 5) heap-push
+
+`(heap-push heap data)`
+
+Push data into the heap and sort. Return the new heap after pushing. 
+
+The user **SHOULD** assign the return value again to get the heap updated. 
+
+e.g. `(def heap0 (heap-push heap0 8))` is to update heap0 by pushing 8 into it. 
+
+#### 6) heap-pop
+
+`(heap-pop heap)`
+
+Pop the heap root and sort. Return a two-element vector. The first element is the data, and second one is the heap after pop operation. 
+
+The user **SHOULD** assign the second return value to the origional heap to get it updated. 
+
+e.g. `(def tree (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))` will print out the root and get tree updated. 
+
+#### 7) heap-get-root
+
+`(heap-get-root heap)`
+
+Return the root value of the heap. This operation will not make any change to the heap itself. 
