@@ -116,6 +116,9 @@
           (heap-sort (Heaptree. (Heapnode. (first par) (:lc new_root) (:rc new_root)) (:order this)))]
       [ret new_tree])))
 
+(defn heap-get-root [this]
+  (:data (:root this)))
+
 (defn -main
   [& args]
   ;; testing and example
@@ -145,4 +148,4 @@
       (heap-push tree 6))
     (def tree
       (heap-push tree 3))
-    (println tree)))
+    (println (heap-get-root tree))))
