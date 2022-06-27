@@ -1,4 +1,4 @@
-(ns heap_from_java.core
+(ns java.core
   (:refer-clojure :exclude [remove pop])
   (:gen-class)
   (:import [java.util PriorityQueue]))
