@@ -94,7 +94,7 @@
   [heap]
   (get (.getArr heap) 0))
 
-(defn pop
+(defn poll
   [heap]
   (let [size (get-size heap)
         comp (.getComp heap)]
@@ -107,7 +107,7 @@
         ret)
       nil)))
 
-(defn push
+(defn add
   [heap value]
   (let [comp (.getComp heap)
         arr (.getArr heap)

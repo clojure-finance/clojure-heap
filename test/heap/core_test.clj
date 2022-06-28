@@ -10,13 +10,13 @@
   (println (time (do
                    (doseq [i (repeat n 0)]
                      (let [id (int (rand n))]
-                       (push x {:id id})))
+                       (add x {:id id})))
                    nil)))
   (println (time (do
-                   (push x {:id n})
+                   (add x {:id n})
                    nil)))
   (println (time (do
                    (doseq [i (repeat n 0)]
                      (let []
-                       (pop x)))
+                       (poll x)))
                    nil))))

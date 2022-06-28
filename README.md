@@ -1,22 +1,26 @@
 # Clojure Heap
 
-A pure Clojure implementation of heap. See the source code in [`src/clojure/heap/core.clj`](src/clojure/heap/core.clj).
+A pure Clojure implementation of heap. 
+
+### Installation
+
+Copy the source code in [`src/clojure/heap/core.clj`](src/clojure/heap/core.clj) to your project.
 
 ### Speed
 
 Equal to the theoretical limit.
 
-**`push`**: O(nlogn)
+**Single** **`add`**: O(logn)
 
-**`pop`**: O(nlogn)
+**Single** **`poll`**: O(logn)
 
 **Space**: n
 
-### Usage
+### APIs
 
 #### `heap`
 
-Create a heap with a comparator[ and an entry].
+Create a heap with a comparator[ and an entry]. O(1)
 
 | Argument     | Type     | Function                                         | Remarks                                                      |
 | ------------ | -------- | ------------------------------------------------ | ------------------------------------------------------------ |
@@ -70,9 +74,9 @@ Get the top value of the heap. If it is a min heap, return the smallest value; o
 
 
 
-#### `push`
+#### `add`
 
-Insert an entry to the heap. The heap will be reorganized to fit the new value. O(nlogn), n = size of the heap
+Insert an entry to the heap. The heap will be reorganized to fit the new value. O(logn), n = size of the heap
 
 | Argument | Type           | Function                             | Remarks                                                |
 | -------- | -------------- | ------------------------------------ | ------------------------------------------------------ |
@@ -90,9 +94,9 @@ Insert an entry to the heap. The heap will be reorganized to fit the new value. 
 
 
 
-#### `pop`
+#### `poll`
 
-Delete and return the top value of the heap. If it is a min heap, return the smallest value; otherwise return the largest value. O(nlogn) n = size of the heap
+Delete and return the top value of the heap. If it is a min heap, return the smallest value; otherwise return the largest value. O(logn), n = size of the heap
 
 | Argument | Type           | Function      | Remarks |
 | -------- | -------------- | ------------- | ------- |
