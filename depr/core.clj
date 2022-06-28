@@ -1,3 +1,4 @@
+;; Deprecated
 ;; (ns clojure.core
 ;;   (:gen-class))
 

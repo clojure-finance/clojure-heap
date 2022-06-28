@@ -1,130 +1,110 @@
-# clojure-heap
-Heap for Clojure
-uses two different ways
+# Clojure Heap
 
-## 1. heap_from_java
-Functions in this package implies heap based on java *PriorityQueue* library. 
+A pure Clojure implementation of heap.
 
-Function features are as follows:
+### Speed
 
-### 1) init
+Equal to the theoretical limit.
 
-`(init)  (init comparater)`
+**`push`**: O(nlogn)
 
-Heap initialize function. Return an empty heap which is initialized with the comparater. 
+**`pop`**: O(nlogn)
 
-One optinal argument *comparater* gives the priority determine function for the heap. For example, if comparater is `>`, it will return an maximum heap. 
-By default, the priority is determined by objects’ natural ordering. 
+**Space**: n
 
-e.g. `(init <)` will return an empty heap in which the priority is give by <. 
+### Usage
 
-### 2) push
+#### `heap`
 
-`(push heap element)`
+Create a heap with a comparator[ and an entry].
 
-Push function. Insert one element into the heap. Return an updated heap. 
+| Argument     | Type     | Function                                         | Remarks                                                      |
+| ------------ | -------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| `comparator` | Function | A comparator function, deciding a max / min heap | Two arguments. Return `true` on matching the condition, `false` otherwise |
+| [`value`]    | Any      | The first entry of the heap                      |                                                              |
 
-e.g. `(push heap0 3)` will push 3 into heap0 and sort the heap again. 
+**Example**
 
-### 3) get-root
-
-`(get-root heap)`
-
-Return the current root of heap. 
-This operation will not change the heap structure itself. 
-
-e.g. Suppose heap1 is a min heap as follows:
-
-![image](https://user-images.githubusercontent.com/55539684/162600574-9c3d7b6e-e2df-40aa-8073-2c1a8e0ca109.png)
-
-`(get-root heap1)` will return 3. And heap1 still look like above. 
-
-### 4) pop
-
-`(pop heap)`
-
-Pop out and return the root of heap. 
-This operation will return the root of heap and then remove it. After that, heap will also be reordered. 
-
-e.g. Suppose heap1 is a heap mentioned above. `(pop heap1)` will return 3, but heap1 will now turn into:
-
-![image](https://user-images.githubusercontent.com/55539684/162600695-9ae820f3-75c8-42f3-9f95-d6a77068601a.png)
-
-which is already updated. 
-
-### 5) size
-
-`(size heap)`
-
-Return the number of elements inside the heap. 
-
-e.g. Suppose heap2 is the new heap after the popping above. `(size heap2)` will return 4. 
+```clojure
+;; define a max heap containing maps
+(def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
+;; without initial value
+(def x (heap (fn [a b] (> (:id a) (:id b)))))
+```
 
 
-## 2. heap_from_clj
 
-Functions in this package is a pure Clojure implement of heap. 
+#### `get-size`
 
-Function features are as follows:
+Get the size (length) of heap. O(1)
 
-#### 0) initialize heap node
+| Argument | Type           | Function      | Remarks |
+| -------- | -------------- | ------------- | ------- |
+| `heap`   | heap.core.Heap | A heap object |         |
 
-`(Heapnode. [data] [left-child-node] [right-child-node])`
+**Example**
 
-All the three elements can be `nil` if do not have value yet. 
+```clojure
+(def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
+(get-size x)
+;; return 1
+```
 
-### 1) make-heaptree 
 
-`(make-heaptree & root order)`
 
-Return an initialized heap. `root` can be a single root with nil left child and right child, or the root of an existing tree structure.  `order` can be either `"ASC"` or `"DESC"`, refers to in order and reverse order accordingly. Default root is empty, and default order is ASC. 
+#### `peek`
 
-One thing should be noticed is that, if the root is from an existing tree structure, this construction function will **NOT** check the order. 
+Get the top value of the heap. If it is a min heap, return the smallest value; otherwise return the largest value. Return nil if the heap is empty. O(1)
 
-e.g. `(make-heaptree (Heapnode. 7 nil nil) "DESC")` will return a heap with root equals to 7, reverse priority. 
+| Argument | Type           | Function      | Remarks |
+| -------- | -------------- | ------------- | ------- |
+| `heap`   | heap.core.Heap | A heap object |         |
 
-### 2) heap-compare
+**Example**
 
-`(heap-compare x1 x2)`
+```clojure
+(def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
+(peek x)
+;; return {:id 3}
+```
 
-Return whether x1 should be a parent node of x2 or not. Users can modify this functions to build different comparaters. 
 
-e.g. if `(heap-compare a b)` returns `True`, then the node with value a will have higher priority than node with value b in an ASC heap. 
 
-### 3) heap-sort
+#### `push`
 
-`(heap-sort heap)`
+Insert an entry to the heap. The heap will be reorganized to fit the new value. O(nlogn), n = size of the heap
 
-Return a sorted heap. Private. Sort to put root to the right place
+| Argument | Type           | Function                             | Remarks                                                |
+| -------- | -------------- | ------------------------------------ | ------------------------------------------------------ |
+| `heap`   | heap.core.Heap | A heap object                        |                                                        |
+| `value`  | Any            | The value to be inserted to the heap | Should be applicable as one argument of the comparator |
 
-### 4) find-leave 
+**Example**
 
-`(find-leave heap)`
+```clojure
+(def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
+(push x {:id 4})
+(get-size x)
+;; return 2
+```
 
-Return `[[leaf-value] [new-heap]]`. Private. Find a leaf node to replace root while doing pop. 
 
-### 5) heap-push
 
-`(heap-push heap data)`
+#### `pop`
 
-Push data into the heap and sort. Return the new heap after pushing. 
+Delete and return the top value of the heap. If it is a min heap, return the smallest value; otherwise return the largest value. O(nlogn) n = size of the heap
 
-The user **SHOULD** assign the return value again to get the heap updated. 
+| Argument | Type           | Function      | Remarks |
+| -------- | -------------- | ------------- | ------- |
+| `heap`   | heap.core.Heap | A heap object |         |
 
-e.g. `(def heap0 (heap-push heap0 8))` is to update heap0 by pushing 8 into it. 
+**Example**
 
-### 6) heap-pop
+```clojure
+(def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
+(pop x)
+;; return {:id 3}
+(pop x)
+;; return nil
+```
 
-`(heap-pop heap)`
-
-Pop the heap root and sort. Return a two-element vector. The first element is the data, and second one is the heap after pop operation. 
-
-The user **SHOULD** assign the second return value to the origional heap to get it updated. 
-
-e.g. `(def tree (do (let [ret (heap-pop tree)] (println (first ret)) (second ret))))` will print out the root and get tree updated. 
-
-### 7) heap-get-root
-
-`(heap-get-root heap)`
-
-Return the root value of the heap. This operation will not make any change to the heap itself. 

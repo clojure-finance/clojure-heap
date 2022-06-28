@@ -81,8 +81,10 @@
 
 ;; external API
 (defn heap
-  [value comp]
-  (Heap. (transient [value]) comp))
+  ([comp]
+   (Heap. (transient []) comp))
+  ([comp value]
+   (Heap. (transient [value]) comp)))
 
 (defn get-size
   [heap]
