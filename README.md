@@ -1,6 +1,6 @@
 # Clojure Heap
 
-A pure Clojure implementation of heap.
+A pure Clojure implementation of heap. See the source code in [`src/heap/core.clj`](src/heap/core.clj).
 
 ### Speed
 
