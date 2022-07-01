@@ -6,7 +6,7 @@
   (getArr [])
   (getComp []))
 
-(deftype Heap [^:unsynchronized-mutable arr
+(defrecord Heap [^:unsynchronized-mutable arr
                ^:unsynchronized-mutable comp]
   HeapItf
   (getArr
@@ -14,10 +14,7 @@
     arr)
   (getComp
     [this]
-    comp)
-  (setArr
-    [this newArr]
-    (set! arr newArr)))
+    comp))
 
 (defn parent
   [i]
@@ -35,48 +32,65 @@
   "swap the value of i and j in heap arr"
   [heap i j]
   (let [val-i (get heap i)
-        val-j (get heap j)
-        heap (assoc! heap i val-j)
-        heap (assoc! heap j val-i)]
-    heap))
+        val-j (get heap j)]
+    (assoc! heap i val-j)
+    (assoc! heap j val-i)))
+
+(defn move-forward
+  [heap i j]
+  (let [val-j (get heap j)]
+    (assoc! heap i val-j)))
 
 (defn top-down
   [arr comp]
   (let [size (count arr)]
-    (loop [curr 0 arr arr]
+    (loop [curr 0]
       (let [l (left curr)
-            r (right curr)]
+            r (+ l 1)]
         (if (>= l size)
-          arr
+          nil
           (if (>= r size)
             ;; only left exist
             (if (comp (get arr curr) (get arr l))
-              arr
-              (recur l (swap arr curr l)))
+              nil
+              (do
+                (swap arr curr l)
+                (recur l)))
             ;; both left and right
-            (let [c-l (comp (get arr curr) (get arr l))
-                  c-r (comp (get arr curr) (get arr r))
-                  l-r (comp (get arr l) (get arr r))]
+            (let [l-val (get arr l)
+                  r-val (get arr r)
+                  curr-val (get arr curr)
+                  c-l (comp curr-val l-val)
+                  c-r (comp curr-val r-val)
+                  l-r (comp l-val r-val)]
               (if (and c-l c-r)
-                arr
+                nil
                 (if (and c-l (not c-r))
-                  (recur r (swap arr curr r))
+                  (do
+                    (swap arr curr r)
+                    (recur r))
                   (if l-r
-                    (recur l (swap arr l curr))
-                    (recur r (swap arr r curr)))))
+                    (do
+                      (swap arr l curr)
+                      (recur l))
+                    (do
+                      (swap arr r curr)
+                      (recur r)))))
               )
             ))))))
 
 (defn bottom-up
   [arr comp]
-  (let [size (count arr)]
-    (loop [curr (dec size) arr arr]
+  (let []
+    (loop [curr (dec (count arr))]
       (let [p (parent curr)]
         (if (< p 0)
-          arr
+          nil
           (if (not (comp (get arr p) (get arr curr)))
-            (recur p (swap arr p curr))
-            arr))))))
+            (do
+              (swap arr p curr)
+              (recur p))
+            nil))))))
 
 
 ;; external API
@@ -96,20 +110,20 @@
 
 (defn poll
   [heap]
-  (let [size (get-size heap)
+  (let [arr (.getArr heap)
+        size (count arr)
         comp (.getComp heap)]
     (if (> size 0)
-      (let [arr (.getArr heap)
-            arr (swap arr 0 (dec size))
-            ret (get arr (dec size))
-            arr (pop! arr)]
-        (.setArr heap (top-down arr comp))
+      (let [ret (get arr 0)]
+        (move-forward arr 0 (dec size))
+        (pop! arr)
+        (top-down arr comp)
         ret)
       nil)))
 
 (defn add
   [heap value]
   (let [comp (.getComp heap)
-        arr (.getArr heap)
-        arr (conj! arr value)]
-    (.setArr heap (bottom-up arr comp))))
+        arr (.getArr heap)]
+    (conj! arr value)
+    (bottom-up arr comp)))
