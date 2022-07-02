@@ -3,9 +3,8 @@
   :url "http://example.com/FIXME"
   :license {:name "MIT"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/data.priority-map "1.1.0"]]
+  :dependencies [[org.clojure/clojure "1.10.1"]]
   :source-paths ["src/clojure"]
   ;; :main ^:skip-aot clojure.core2/heap
-  :repl-options {:init-ns heap.core-test
+  :repl-options {:init-ns heap.core
                  :timeout 180000})
