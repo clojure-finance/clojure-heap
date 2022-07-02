@@ -1,8 +1,8 @@
-(defproject heap_from_java "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject com.github.clojure-finance/clojure-heap "1.0.0"
+  :description "Pure Clojure implementation of a heap"
+  :url "https://github.com/clojure-finance/clojure-heap"
   :license {:name "MIT"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url "https://github.com/clojure-finance/clojure-heap/blob/main/LICENSE"}
   :dependencies [[org.clojure/clojure "1.10.1"]]
   :source-paths ["src/clojure"]
   ;; :main ^:skip-aot clojure.core2/heap
