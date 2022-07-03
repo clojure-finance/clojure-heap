@@ -1,4 +1,5 @@
-(ns heap.core)
+(ns heap.core
+  (:refer-clojure :exclude [peek]))
 ;; (def heap (transient []))
 
 (definterface HeapItf
@@ -54,9 +55,12 @@
               arr
               (recur l (swap arr curr l)))
             ;; both left and right
-            (let [c-l (comp (get arr curr) (get arr l))
-                  c-r (comp (get arr curr) (get arr r))
-                  l-r (comp (get arr l) (get arr r))]
+            (let [curr-val (get arr curr)
+                  l-val (get arr l)
+                  r-val (get arr r)
+                  c-l (comp curr-val l-val)
+                  c-r (comp curr-val r-val)
+                  l-r (comp l-val r-val)]
               (if (and c-l c-r)
                 arr
                 (if (and c-l (not c-r))
