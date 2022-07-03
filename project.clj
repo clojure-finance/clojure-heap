@@ -4,7 +4,7 @@
   :license {:name "MIT"
             :url "https://github.com/clojure-finance/clojure-heap/blob/main/LICENSE"}
   :dependencies [[org.clojure/clojure "1.10.1"]]
-  :source-paths ["src/clojure"]
+  :source-paths ["src/clojure/heap"]
   ;; :main ^:skip-aot clojure.core2/heap
   :repl-options {:init-ns heap.core
                  :timeout 180000})
