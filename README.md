@@ -5,7 +5,12 @@ A pure Clojure implementation of heap.
 ### Installation
 Available on [![Clojars Project](https://img.shields.io/clojars/v/com.github.clojure-finance/clojure-heap.svg)](https://clojars.org/com.github.clojure-finance/clojure-heap)
 
-Or
+Import it using
+```clojure
+(require '[clojure-heap.core :as heap])
+```
+
+***Or***
 
 Copy the source code in [`src/clojure/heap/core.clj`](src/clojure/heap/core.clj) to your project.
 
