@@ -7,7 +7,7 @@ Available on [![Clojars Project](https://img.shields.io/clojars/v/com.github.clo
 
 Import it using
 ```clojure
-(require '[clojure-heap.core :as heap])
+(require '[heap.core :as heap])
 ```
 
 ***Or***
