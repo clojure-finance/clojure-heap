@@ -1,4 +1,4 @@
-(defproject com.github.clojure-finance/clojure-heap "1.0.1"
+(defproject com.github.clojure-finance/clojure-heap "1.0.2"
   :description "Pure Clojure implementation of a heap"
   :url "https://github.com/clojure-finance/clojure-heap"
   :license {:name "MIT"
