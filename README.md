@@ -7,12 +7,12 @@ Available on [![Clojars Project](https://img.shields.io/clojars/v/com.github.clo
 
 Import it using
 ```clojure
-(require '[heap.core :as heap])
+(require '[clojure-heap.core :as heap])
 ```
 
 ***Or***
 
-Copy the source code in [`src/clojure/heap/core.clj`](src/clojure/heap/core.clj) to your project.
+Copy the source code in [`src/clojure/clojure_heap/core.clj`](src/clojure/heap/core.clj) to your project.
 
 ### Speed
 
