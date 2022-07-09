@@ -1,0 +1,4 @@
+{:deps
+ {org.clojure/clojure {:mvn/version "1.10.1"}}
+ :paths
+   ["src/clojure" "test/clojure-heap"]}

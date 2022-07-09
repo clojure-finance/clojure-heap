@@ -1,4 +1,4 @@
-(ns heap.core
+(ns clojure-heap.core
   (:refer-clojure :exclude [peek]))
 ;; (def heap (transient []))
 
