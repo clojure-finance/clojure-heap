@@ -1,6 +1,6 @@
 # Clojure Heap
 
-A pure Clojure implementation of mutable binary heap. 
+A pure Clojure implementation of mutable binary **heap** / **priority queue**. 
 
 ### Installation
 Available on [![Clojars Project](https://img.shields.io/clojars/v/com.github.clojure-finance/clojure-heap.svg)](https://clojars.org/com.github.clojure-finance/clojure-heap)
