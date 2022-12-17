@@ -95,7 +95,7 @@ Insert an entry to the heap. The heap will be reorganized to fit the new value. 
 
 ```clojure
 (def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
-(push x {:id 4})
+(add x {:id 4})
 (get-size x)
 ;; return 2
 ```
@@ -114,9 +114,9 @@ Delete and return the top value of the heap. If it is a min heap, return the sma
 
 ```clojure
 (def x (heap (fn [a b] (> (:id a) (:id b))) {:id 3}))
-(pop x)
+(poll x)
 ;; return {:id 3}
-(pop x)
+(poll x)
 ;; return nil
 ```
 
